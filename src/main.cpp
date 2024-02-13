@@ -92,9 +92,10 @@ void handlerLED(uint64_t payload)
       ledcWrite(RED_CHANNEL, redDuty);
       ledcWrite(GREEN_CHANNEL, greenDuty);
       ledcWrite(BLUE_CHANNEL, blueDuty);
-      unsigned long waitTime = ((FADE_DURATION / bpm) / FADE_STEPS) / 2;
-      unsigned long startTime = millis();
-      while (millis() - startTime < waitTime)
+      float durationPerBpm = (FADE_DURATION / bpm);
+      float waitTime = (durationPerBpm / FADE_STEPS);
+      float startTime = millis();
+      while (millis() - startTime < waitTime / 2)
       {
         // Yield to other tasks while waiting
         yield();
@@ -104,7 +105,7 @@ void handlerLED(uint64_t payload)
     if (isFade)
     {
       // Fade down with specified steps and delay
-      for (int duty = FADE_STEPS; duty >= 0; duty--)
+      for (int duty = FADE_STEPS / 2; duty >= 0; duty--)
       {
         // Calculate duty cycle for each color based on current step
         int redDuty = map(duty, 0, FADE_STEPS, 0, R);
@@ -115,9 +116,10 @@ void handlerLED(uint64_t payload)
         ledcWrite(RED_CHANNEL, redDuty);
         ledcWrite(GREEN_CHANNEL, greenDuty);
         ledcWrite(BLUE_CHANNEL, blueDuty);
-        unsigned long waitTime = ((FADE_DURATION / bpm) / FADE_STEPS) / 2;
-        unsigned long startTime = millis();
-        while (millis() - startTime < waitTime)
+        float durationPerBpm = (FADE_DURATION / bpm);
+        float waitTime = (durationPerBpm / FADE_STEPS);
+        float startTime = millis();
+        while (millis() - startTime < waitTime / 2)
         {
           // Yield to other tasks while waiting
           yield();
